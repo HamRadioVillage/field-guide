@@ -51,3 +51,8 @@ You can help by:
 3. Submit suggestions via issues
 
 ---
+
+## Reference Material
+
+- Original version from DC33: https://pdfhost.io/v/udZfVX5yL7_radioOperatorFieldGuide_v1_4
+- https://www.arrl.org/
