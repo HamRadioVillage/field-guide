@@ -1,7 +1,4 @@
-# RANDOM IDEAS
----
-
-### IMPROVISED ANTENNAS
+# IMPROVISED ANTENNAS
 
 1. Cantenna ("can it ham?")
    - Ref:
