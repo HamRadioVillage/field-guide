@@ -13,6 +13,6 @@
 | Marine VHF           | 156.8 MHz (Ch 16)        | Distress / hailing                     |
 | Airband              | 118–137 MHz (AM)         | Aircraft comms                         |
 | Emergency services   | Varies (often 150–900 MHz)| Usually encrypted / trunked            |
-| HF long range        | 3–30 MHz                 | Skip propagation (global)              |
+| HF long range        | 3–30 MHz                 | Global reach (special rules apply)             |
 
 ---
