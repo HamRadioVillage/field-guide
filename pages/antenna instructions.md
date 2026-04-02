@@ -29,6 +29,8 @@
    - Solder 50ohm coax outer shield to one wire, inner core to the other. Lengths of conductor on coax should be the same. Terminate as close to joint as possible.
    - From end near coax termination, measure to 50.2cm. From this point, cut and remove 2cm section of wire connected to shield of coax.
    - On both ends of wire: separate the two strands for 2cm along their seam, strip 1cm from each wire, then turn the wires towards each other and solder them together.
+   - Hang in a tree (straight, vertical)
+   - For J-pole, remove long section of shield-side wire and trim 0.5cm from remaining loose wire.
 
 3. Dipole
    - This build is for ~145 MHz
