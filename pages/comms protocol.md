@@ -25,3 +25,22 @@
 | 2x3         | Barely readable          | Weak                | Multiple issues                   | RF + audio              | Fix position AND mic              |
 | 1x2         | Unreadable               | Very weak           | Near loss of comms                | Severe RF issue         | Relocate immediately              |
 | Intermittent| Varies                   | Varies              | Cutting in/out                    | Connection / power      | Check battery, connectors         |
+
+---
+### TERMINOLOGY
+
+| TERM        | MEANING                                  | USE CASE / NOTE                          |
+|-------------|------------------------------------------|------------------------------------------|
+| Affirm      | Yes                                      | Use instead of “yes”                     |
+| Negative    | No                                       | Use instead of “no”                      |
+| Copy        | I understand / received                  | Does not imply compliance                |
+| Wilco       | Will comply                              | Implies understood + will act            |
+| Over        | End of transmission, reply expected      | Use when handing off                     |
+| Out         | End of transmission, no reply expected   | Do not combine with “Over”               |
+| Standby     | Wait, I will respond shortly             | Temporary pause                          |
+| Say again   | Repeat your last transmission            | Do NOT say “repeat” (artillery term)     |
+| Break       | Separator / pause in transmission        | Used to structure long messages          |
+| Break break | Urgent / priority traffic                | Interrupt ongoing comms                  |
+| Go ahead    | Proceed with your message                | Invitation to transmit                   |
+| Clear       | Leaving frequency / done transmitting    | End of presence on channel               |
+| 73          | Best regards                            | Common sign-off (amateur radio)          |
