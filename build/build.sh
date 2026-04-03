@@ -4,12 +4,15 @@ set -e
 mkdir -p output
 
 cat \
-% list sections here
-  sections/01_intro.md \
-  sections/02_protocol.md \
-  sections/03_signal_reports.md \
-  sections/04_foxhunting.md \
-  sections/05_logbook.md \
+  sections/checklist.md \
+  sections/frequencies.md \
+  sections/phonetic alphabet table.csv \
+  sections/comms protocol.md \
+  sections/foxhunting.md \
+  sections/antennas-directional.md \
+  sections/antennas-omnidirectional.md \
+  sections/basic radio math.md \
+  sections/contact log.md \
   > output/combined.md
 
 pandoc output/combined.md \
