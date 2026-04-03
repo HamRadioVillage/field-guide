@@ -1,0 +1,68 @@
+name: Build Zine
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install tools
+        run: sudo apt-get update && sudo apt-get install -y pandoc texlive-xetex texlive-latex-extra
+
+      - name: Combine + Convert
+        run: |
+          mkdir -p output
+          cat sections/*.md > output/combined.md
+
+          pandoc output/combined.md \
+            --from=gfm \
+            --to=latex \
+            --standalone \
+            --template=template.tex \
+            -o output/book.tex
+
+      - name: Build PDF
+        run: xelatex -output-directory=output output/book.tex
+
+      - name: Upload PDF
+        uses: actions/upload-artifact@v4
+        with:
+          name: zine
+          path: output/book.pdfname: Build LaTeX PDF
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '**.tex'
+      - '.github/workflows/build-pdf.yml'
+  pull_request:
+    paths:
+      - '**.tex'
+      - '.github/workflows/build-pdf.yml'
+  workflow_dispatch:
+
+jobs:
+  build-pdf:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repo
+        uses: actions/checkout@v4
+
+      - name: Compile LaTeX
+        uses: xu-cheng/latex-action@v3
+        with:
+          root_file: cover.tex
+
+      - name: Upload PDF
+        uses: actions/upload-artifact@v4
+        with:
+          name: latex-pdf
+          path: cover.pdf
