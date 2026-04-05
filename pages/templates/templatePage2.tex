@@ -4,8 +4,8 @@
 \usepackage[absolute,overlay]{textpos}
 \usepackage[most]{tcolorbox}
 \usepackage{markdown}
-\usepackage{calc}
-\usepackage{ifthen}
+\usepackage{graphicx}
+\usepackage{xparse}
 \usepackage[T1]{fontenc}
 \usepackage{lmodern}
 \usepackage{microtype}
@@ -14,49 +14,28 @@
 \pagestyle{empty}
 \setlength{\parindent}{0pt}
 
-% =========================================================
-% GLOBAL CONTENT DIRECTORY
-% =========================================================
-\newcommand{\ContentDir}{pages/}%content/}
+\newcommand{\ContentDir}{pages/content/}
 
-% =========================================================
-% TEXTPOS GRID
-% 1 module = 1 inch
-% Change these only if you want a different coordinate system
-% =========================================================
 \setlength{\TPHorizModule}{1in}
 \setlength{\TPVertModule}{1in}
 
-% =========================================================
-% BOX STYLE DEFAULTS
-% =========================================================
 \newcommand{\DefaultBoxRule}{0.5pt}
 \newcommand{\DefaultArc}{0pt}
-\newcommand{\DefaultLeftPad}{4pt}
-\newcommand{\DefaultRightPad}{4pt}
-\newcommand{\DefaultTopPad}{4pt}
-\newcommand{\DefaultBottomPad}{4pt}
 
-% =========================================================
-% GENERIC CONTENT BOX
-%
-% #1 = x position of upper-left corner
-% #2 = y position of upper-left corner
-% #3 = width
-% #4 = height
-% #5 = left padding
-% #6 = right padding
-% #7 = top padding
-% #8 = bottom padding
-% #9 = markdown filename (relative to \ContentDir)
-% #10 = rotation angle (degrees)
-%
-% Example:
-% \ContentBox{0.25}{0.25}{2.5}{3.0}{4pt}{4pt}{4pt}{4pt}{left.md}{90}
-% =========================================================
-\newcommand{\ContentBox}[10]{%
+% Arguments:
+% 1  x
+% 2  y
+% 3  width
+% 4  height
+% 5  left pad
+% 6  right pad
+% 7  top pad
+% 8  bottom pad
+% 9  filename
+% 10 rotation angle
+\NewDocumentCommand{\ContentBox}{m m m m m m m m m m}{%
   \begin{textblock*}{#3in}(#1in,#2in)
-    \rotatebox{#10}{%
+    \rotatebox[origin=c]{#10}{%
       \begin{tcolorbox}[
         width=#3in,
         height=#4in,
@@ -78,7 +57,6 @@
     }
   \end{textblock*}
 }
-
 \begin{document}
 
 % =========================================================
