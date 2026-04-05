@@ -1,7 +1,31 @@
-- name: Convert one Markdown file to LaTeX
-  run: |
-    pandoc page.md \
-      --from=gfm \
-      --to=latex \
-      --standalone \
-      -o page.tex
+name: Convert MD to TEX
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  convert:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Install pandoc
+        run: sudo apt-get update && sudo apt-get install -y pandoc
+
+      - name: Convert Markdown to LaTeX
+        run: |
+          pandoc page.md \
+            --from=gfm \
+            --to=latex \
+            --standalone \
+            -o page.tex
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: latex-file
+          path: page.tex
