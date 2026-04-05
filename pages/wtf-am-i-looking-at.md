@@ -39,7 +39,7 @@ When you push changes or open a pull request, GitHub runs a workflow.
 
 That workflow does this:
 
-### Step 1 — Convert Markdown → LaTeX
+### Step 1 - Convert Markdown → LaTeX
 
 Each file in:
 
@@ -59,7 +59,7 @@ You do not need to run this yourself.
 
 ---
 
-### Step 2 — Assemble pages
+### Step 2 - Assemble pages
 
 LaTeX templates in:
 
@@ -81,7 +81,7 @@ Example:
 
 ---
 
-### Step 3 — Compile PDF
+### Step 3 - Compile PDF
 
 Each template is compiled into a PDF:
 
@@ -92,6 +92,14 @@ pages/compiled/
 One template = one page PDF.
 
 ---
+
+### Step 4 - Create Zine
+
+All of the individual pages get mashed together into a printable zine format.
+
+```
+pages/compiled/
+```
 
 ## Big picture
 ---
