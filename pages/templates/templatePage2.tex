@@ -6,6 +6,7 @@
 \usepackage{markdown}
 \usepackage{graphicx}
 \usepackage{xparse}
+\usepackage{pgfkeys}
 \usepackage[T1]{fontenc}
 \usepackage{lmodern}
 \usepackage{microtype}
@@ -14,45 +15,69 @@
 \pagestyle{empty}
 \setlength{\parindent}{0pt}
 
+% =========================================================
+% GLOBAL CONTENT DIRECTORY
+% =========================================================
 \newcommand{\ContentDir}{pages/content/}
 
+% =========================================================
+% POSITIONING GRID
+% Coordinates are in inches from upper-left corner
+% =========================================================
 \setlength{\TPHorizModule}{1in}
 \setlength{\TPVertModule}{1in}
 
+% =========================================================
+% DEFAULT BOX STYLE
+% =========================================================
 \newcommand{\DefaultBoxRule}{0.5pt}
 \newcommand{\DefaultArc}{0pt}
+\newcommand{\DefaultBorderColor}{black}
 
-% Arguments:
-% 1  x
-% 2  y
-% 3  width
-% 4  height
-% 5  left pad
-% 6  right pad
-% 7  top pad
-% 8  bottom pad
-% 9  filename
-% 10 rotation angle
-\NewDocumentCommand{\ContentBox}{m m m m m m m m m m}{%
-  \begin{textblock*}{#3in}(#1in,#2in)
-    \rotatebox[origin=c]{#10}{%
+% =========================================================
+% CONTENT BOX KEY DEFINITIONS
+% =========================================================
+\pgfkeys{
+  /contentbox/.is family,
+  /contentbox,
+  x/.initial=0,
+  y/.initial=0,
+  width/.initial=1,
+  height/.initial=1,
+  hpad/.initial=4pt,
+  vpad/.initial=4pt,
+  angle/.initial=0,
+  bordercolor/.initial=\DefaultBorderColor,
+  rule/.initial=\DefaultBoxRule,
+  filename/.initial=
+}
+
+% =========================================================
+% CONTENT BOX
+% Pass one key-value block
+% =========================================================
+\NewDocumentCommand{\ContentBox}{m}{%
+  \pgfkeys{/contentbox, #1}%
+  \begin{textblock*}{\pgfkeysvalueof{/contentbox/width}in}
+    (\pgfkeysvalueof{/contentbox/x}in,\pgfkeysvalueof{/contentbox/y}in)
+    \rotatebox[origin=c]{\pgfkeysvalueof{/contentbox/angle}}{%
       \begin{tcolorbox}[
-        width=#3in,
-        height=#4in,
+        width=\pgfkeysvalueof{/contentbox/width}in,
+        height=\pgfkeysvalueof{/contentbox/height}in,
         colback=white,
-        colframe=black,
-        boxrule=\DefaultBoxRule,
+        colframe=\pgfkeysvalueof{/contentbox/bordercolor},
+        boxrule=\pgfkeysvalueof{/contentbox/rule},
         arc=\DefaultArc,
-        left=#5,
-        right=#6,
-        top=#7,
-        bottom=#8,
+        left=\pgfkeysvalueof{/contentbox/hpad},
+        right=\pgfkeysvalueof{/contentbox/hpad},
+        top=\pgfkeysvalueof{/contentbox/vpad},
+        bottom=\pgfkeysvalueof{/contentbox/vpad},
         valign=top,
         halign=flush left,
         sharp corners,
         enhanced
       ]
-      \markdownInput{\ContentDir#9}
+      \markdownInput{\ContentDir\pgfkeysvalueof{/contentbox/filename}}
       \end{tcolorbox}
     }%
   \end{textblock*}
@@ -60,8 +85,41 @@
 
 \begin{document}
 
-\ContentBox{0.25}{0.25}{8}{3.50}{4pt}{4pt}{4pt}{4pt}{antennas-omnidirectional.md}{0}
-\ContentBox{2.75}{3.75}{6}{3}{4pt}{4pt}{4pt}{4pt}{comms-protocol.md}{90}
-\ContentBox{0.25}{6}{8}{4}{4pt}{4pt}{4pt}{4pt}{checklist.md}{0}
+% =========================================================
+% BOX DEFINITIONS
+% =========================================================
+
+\ContentBox{
+  x=0.25,
+  y=0.25,
+  width=5.00,
+  height=2.50,
+  hpad=4pt,
+  vpad=4pt,
+  angle=0,
+  filename=antennas-omnidirectional.md
+}
+
+\ContentBox{
+  x=0.50,
+  y=3.00,
+  width=4.00,
+  height=2.00,
+  hpad=6pt,
+  vpad=4pt,
+  angle=90,
+  filename=comms-protocol.md
+}
+
+\ContentBox{
+  x=0.25,
+  y=5.50,
+  width=5.00,
+  height=2.25,
+  hpad=4pt,
+  vpad=4pt,
+  angle=0,
+  filename=checklist.md
+}
 
 \end{document}
