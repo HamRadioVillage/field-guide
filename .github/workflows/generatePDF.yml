@@ -1,4 +1,4 @@
-name: Build Page PDF
+name: Build Page PDFs
 
 on:
   push:
@@ -16,17 +16,29 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v4
 
-      - name: Install LaTeX
+      - name: Install tools
         run: |
           sudo apt-get update
-          sudo apt-get install -y \
-            texlive-latex-extra \
-            texlive-fonts-recommended \
-            texlive-luatex \
-            latexmk
+          sudo apt-get install -y pandoc latexmk texlive-latex-extra texlive-fonts-recommended
 
-      - name: Create output directory
-        run: mkdir -p pages/compiled
+      - name: Create output directories
+        run: |
+          mkdir -p pages/generated
+          mkdir -p pages/compiled
+
+      - name: Convert Markdown to TeX
+        run: |
+          for f in pages/content/*.md; do
+            base=$(basename "$f" .md)
+            pandoc "$f" \
+              --from=gfm \
+              --to=latex \
+              -o "pages/generated/${base}.tex"
+          done
+
+      - name: Show generated files
+        run: |
+          find pages -maxdepth 3 -type f | sort
 
       - name: Build PDF
         run: |
@@ -36,5 +48,6 @@ jobs:
             -output-directory=pages/compiled \
             pages/templates/templatePage2.tex
 
-      - name: Show output files
-        run: ls -la pages/compiled
+      - name: Show compiled files
+        run: |
+          ls -la pages/compiled
