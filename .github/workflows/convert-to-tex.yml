@@ -18,7 +18,7 @@ jobs:
 
       - name: Convert Markdown to LaTeX
         run: |
-          pandoc foxhunting.md \
+          pandoc pages/foxhunting.md \
             --from=gfm \
             --to=latex \
             --standalone \
@@ -28,4 +28,4 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: latex-file
-          path: foxhuntingTex.tex
+          path: pages/foxhuntingTex.tex
