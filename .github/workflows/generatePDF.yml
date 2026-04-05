@@ -1,0 +1,40 @@
+name: Build Page PDF
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Install LaTeX
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            texlive-latex-extra \
+            texlive-fonts-recommended \
+            texlive-luatex \
+            latexmk
+
+      - name: Create output directory
+        run: mkdir -p pages/compiled
+
+      - name: Build PDF
+        run: |
+          latexmk -pdf \
+            -interaction=nonstopmode \
+            -halt-on-error \
+            -output-directory=pages/compiled \
+            pages/templates/templatePage2.tex
+
+      - name: Show output files
+        run: ls -la pages/compiled
