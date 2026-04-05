@@ -48,6 +48,12 @@ jobs:
             -output-directory=pages/compiled \
             pages/templates/templatePage2.tex
 
+      - name: Upload PDF
+        uses: actions/upload-artifact@v4
+        with:
+          name: compiled-pages
+          path: pages/compiled/*.pdf
+
       - name: Show compiled files
         run: |
           ls -la pages/compiled
