@@ -1,0 +1,191 @@
+% This template takes a set of .pdf files and aranges them for zine printing. Size is A4 for final sheet and all input sheets.
+\documentclass{article}
+
+\usepackage[a4paper,landscape,margin=0cm]{geometry}
+
+\usepackage{graphicx}
+\usepackage{tikz}
+\usetikzlibrary{calc}
+\pagestyle{empty}
+
+% =========================================================
+% USER SETTINGS
+% =========================================================
+
+% Layout: 4 columns x 2 rows = 8 slots
+\newcount\TileCols
+\newcount\TileRows
+\TileCols=4
+\TileRows=2
+
+% Margins and gaps
+\newlength{\OuterMarginX}
+\newlength{\OuterMarginY}
+\newlength{\TileGapX}
+\newlength{\TileGapY}
+
+\setlength{\OuterMarginX}{0in}
+\setlength{\OuterMarginY}{0in}
+\setlength{\TileGapX}{0in}
+\setlength{\TileGapY}{0in}
+
+% Computed tile size
+\newlength{\TileWidth}
+\newlength{\TileHeight}
+
+\setlength{\TileWidth}{\dimexpr(\paperwidth - 2\OuterMarginX - 3\TileGapX)/4\relax}
+\setlength{\TileHeight}{\dimexpr(\paperheight - 2\OuterMarginY - 1\TileGapY)/2\relax}
+
+% =========================================================
+% PAGE FILES
+% =========================================================
+
+% Each source page is a standalone PDF
+\newcommand{\PageFileA}{pages/TestPage1.pdf}
+\newcommand{\PageFileB}{pages/TestPage2.pdf}
+\newcommand{\PageFileC}{pages/TestPage3.pdf}
+\newcommand{\PageFileD}{pages/TestPage4.pdf}
+\newcommand{\PageFileE}{pages/TestPage5.pdf}
+\newcommand{\PageFileF}{pages/TestPage6.pdf}
+\newcommand{\PageFileG}{pages/TestPage7.pdf}
+\newcommand{\PageFileH}{pages/TestPage8.pdf}
+
+\newcommand{\GetPageFile}[1]{%
+	\ifcase#1
+	\PackageError{zine}{Page index 0 is invalid}{Use page numbers 1-8}
+	\or \PageFileA
+	\or \PageFileB
+	\or \PageFileC
+	\or \PageFileD
+	\or \PageFileE
+	\or \PageFileF
+	\or \PageFileG
+	\or \PageFileH
+	\else
+	\PackageError{zine}{Page index out of range}{Use page numbers 1-8}
+	\fi
+}
+
+% =========================================================
+% IMPOSITION MAP
+% =========================================================
+%
+% Slot numbering:
+% top row:    				1 2 3 4
+% bottom row (upside down): 5 6 7 8
+%
+% Replace these with your desired one-side zine order.
+%
+
+\newcommand{\SlotPageA}{8}
+\newcommand{\SlotPageB}{1}
+\newcommand{\SlotPageC}{2}
+\newcommand{\SlotPageD}{7}
+\newcommand{\SlotPageE}{6}
+\newcommand{\SlotPageF}{3}
+\newcommand{\SlotPageG}{4}
+\newcommand{\SlotPageH}{5}
+
+\newcommand{\GetSlotPage}[1]{%
+	\ifcase#1
+	\PackageError{zine}{Slot index 0 is invalid}{Use slot numbers 1-8}
+	\or \SlotPageA
+	\or \SlotPageB
+	\or \SlotPageC
+	\or \SlotPageD
+	\or \SlotPageE
+	\or \SlotPageF
+	\or \SlotPageG
+	\or \SlotPageH
+	\else
+	\PackageError{zine}{Slot index out of range}{Use slot numbers 1-8}
+	\fi
+}
+
+% =========================================================
+% ROTATION MAP
+% =========================================================
+
+\newcommand{\SlotRotA}{0}
+\newcommand{\SlotRotB}{0}
+\newcommand{\SlotRotC}{0}
+\newcommand{\SlotRotD}{0}
+\newcommand{\SlotRotE}{180}
+\newcommand{\SlotRotF}{180}
+\newcommand{\SlotRotG}{180}
+\newcommand{\SlotRotH}{180}
+
+\newcommand{\GetSlotRotation}[1]{%
+	\ifcase#1
+	\PackageError{zine}{Slot index 0 is invalid}{Use slot numbers 1-8}
+	\or \SlotRotA
+	\or \SlotRotB
+	\or \SlotRotC
+	\or \SlotRotD
+	\or \SlotRotE
+	\or \SlotRotF
+	\or \SlotRotG
+	\or \SlotRotH
+	\else
+	\PackageError{zine}{Slot index out of range}{Use slot numbers 1-8}
+	\fi
+}
+
+% =========================================================
+% PLACE ONE TILE
+% =========================================================
+%
+% #1 = slot number
+% #2 = x offset from sheet top-left
+% #3 = y offset from sheet top-left
+%
+
+\newcommand{\PlaceTile}[3]{%
+	\edef\ThisPageNum{\GetSlotPage{#1}}%
+	\edef\ThisRotation{\GetSlotRotation{#1}}%
+	\edef\ThisPageFile{\GetPageFile{\ThisPageNum}}%
+	
+	% top-left corner of this tile
+	\coordinate (TileNW) at ($ (current page.north west) + (#2,-#3) $);
+	
+	% tile center
+	\coordinate (TileCenter) at ($ (TileNW) + (.5\TileWidth,-.5\TileHeight) $);
+	
+	% placed page
+	\node[anchor=center, inner sep=0pt] at (TileCenter) {%
+		\includegraphics[
+		width=\TileWidth,
+		height=\TileHeight,
+		keepaspectratio,
+		angle=\ThisRotation
+		]{\ThisPageFile}%
+	};
+	
+	% debug border
+	\draw[gray]
+	(TileNW) rectangle ($ (TileNW) + (\TileWidth,-\TileHeight) $);
+	
+	% debug label
+	\node[anchor=north west, font=\tiny]
+	at ($ (TileNW) + (2pt,-2pt) $)
+	{Slot #1 / Page \ThisPageNum / Rot \ThisRotation};
+}
+
+\begin{document}
+	\noindent
+	\begin{tikzpicture}[remember picture, overlay]
+		
+		% Row 1
+		\PlaceTile{1}{\OuterMarginX}{\OuterMarginY}
+		\PlaceTile{2}{\dimexpr\OuterMarginX+\TileWidth+\TileGapX\relax}{\OuterMarginY}
+		\PlaceTile{3}{\dimexpr\OuterMarginX+2\TileWidth+2\TileGapX\relax}{\OuterMarginY}
+		\PlaceTile{4}{\dimexpr\OuterMarginX+3\TileWidth+3\TileGapX\relax}{\OuterMarginY}
+		
+		% Row 2
+		\PlaceTile{5}{\OuterMarginX}{\dimexpr\OuterMarginY+\TileHeight+\TileGapY\relax}
+		\PlaceTile{6}{\dimexpr\OuterMarginX+\TileWidth+\TileGapX\relax}{\dimexpr\OuterMarginY+\TileHeight+\TileGapY\relax}
+		\PlaceTile{7}{\dimexpr\OuterMarginX+2\TileWidth+2\TileGapX\relax}{\dimexpr\OuterMarginY+\TileHeight+\TileGapY\relax}
+		\PlaceTile{8}{\dimexpr\OuterMarginX+3\TileWidth+3\TileGapX\relax}{\dimexpr\OuterMarginY+\TileHeight+\TileGapY\relax}
+		
+	\end{tikzpicture}
+\end{document}
