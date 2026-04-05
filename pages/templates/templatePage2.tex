@@ -3,7 +3,6 @@
 \usepackage[paperwidth=5.5in,paperheight=8.5in,margin=0in]{geometry}
 \usepackage[absolute,overlay]{textpos}
 \usepackage[most]{tcolorbox}
-\usepackage{markdown}
 \usepackage{graphicx}
 \usepackage{xparse}
 \usepackage{pgfkeys}
@@ -15,15 +14,29 @@
 \pagestyle{empty}
 \setlength{\parindent}{0pt}
 
+% =========================================================
+% DIRECTORIES
+% =========================================================
 \newcommand{\ContentDir}{pages/content/}
+\newcommand{\GeneratedDir}{pages/generated/}
 
+% =========================================================
+% POSITIONING GRID
+% Coordinates in inches from upper-left corner
+% =========================================================
 \setlength{\TPHorizModule}{1in}
 \setlength{\TPVertModule}{1in}
 
+% =========================================================
+% DEFAULT BOX STYLE
+% =========================================================
 \newcommand{\DefaultBoxRule}{0.5pt}
 \newcommand{\DefaultArc}{0pt}
 \newcommand{\DefaultBorderColor}{black}
 
+% =========================================================
+% CONTENT BOX KEYS
+% =========================================================
 \pgfkeys{
 /contentbox/.is family,
 /contentbox,
@@ -39,6 +52,10 @@ rule/.initial=0.5pt,
 filename/.initial=
 }
 
+% =========================================================
+% CONTENT BOX
+% filename should be the generated .tex file
+% =========================================================
 \NewDocumentCommand{\ContentBox}{m}{%
   \pgfkeys{/contentbox/.cd,#1}%
   \begin{textblock*}{\pgfkeysvalueof{/contentbox/width}in}
@@ -60,7 +77,7 @@ filename/.initial=
         sharp corners,
         enhanced
       ]
-      \markdownInput{\ContentDir\pgfkeysvalueof{/contentbox/filename}}
+      \input{\GeneratedDir\pgfkeysvalueof{/contentbox/filename}}
       \end{tcolorbox}
     }%
   \end{textblock*}
@@ -76,7 +93,7 @@ height=2.50,
 hpad=4pt,
 vpad=4pt,
 angle=0,
-filename=antennas-omnidirectional.md
+filename=antennas-omnidirectional.tex
 }
 
 \ContentBox{
@@ -87,7 +104,7 @@ height=2.00,
 hpad=6pt,
 vpad=4pt,
 angle=90,
-filename=comms-protocol.md
+filename=comms-protocol.tex
 }
 
 \ContentBox{
@@ -98,7 +115,7 @@ height=2.25,
 hpad=4pt,
 vpad=4pt,
 angle=0,
-filename=checklist.md
+filename=checklist.tex
 }
 
 \end{document}
