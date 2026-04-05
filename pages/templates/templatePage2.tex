@@ -1,0 +1,97 @@
+\documentclass[10pt]{article}
+
+\usepackage[paperwidth=5.5in,paperheight=8.5in,margin=0in]{geometry}
+\usepackage[absolute,overlay]{textpos}
+\usepackage[most]{tcolorbox}
+\usepackage{markdown}
+\usepackage{calc}
+\usepackage{ifthen}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{microtype}
+\usepackage{parskip}
+
+\pagestyle{empty}
+\setlength{\parindent}{0pt}
+
+% =========================================================
+% GLOBAL CONTENT DIRECTORY
+% =========================================================
+\newcommand{\ContentDir}{pages/}%content/}
+
+% =========================================================
+% TEXTPOS GRID
+% 1 module = 1 inch
+% Change these only if you want a different coordinate system
+% =========================================================
+\setlength{\TPHorizModule}{1in}
+\setlength{\TPVertModule}{1in}
+
+% =========================================================
+% BOX STYLE DEFAULTS
+% =========================================================
+\newcommand{\DefaultBoxRule}{0.5pt}
+\newcommand{\DefaultArc}{0pt}
+\newcommand{\DefaultLeftPad}{4pt}
+\newcommand{\DefaultRightPad}{4pt}
+\newcommand{\DefaultTopPad}{4pt}
+\newcommand{\DefaultBottomPad}{4pt}
+
+% =========================================================
+% GENERIC CONTENT BOX
+%
+% #1 = x position of upper-left corner
+% #2 = y position of upper-left corner
+% #3 = width
+% #4 = height
+% #5 = left padding
+% #6 = right padding
+% #7 = top padding
+% #8 = bottom padding
+% #9 = markdown filename (relative to \ContentDir)
+% #10 = rotation angle (degrees)
+%
+% Example:
+% \ContentBox{0.25}{0.25}{2.5}{3.0}{4pt}{4pt}{4pt}{4pt}{left.md}{90}
+% =========================================================
+\newcommand{\ContentBox}[10]{%
+  \begin{textblock*}{#3in}(#1in,#2in)
+    \rotatebox{#10}{%
+      \begin{tcolorbox}[
+        width=#3in,
+        height=#4in,
+        colback=white,
+        colframe=black,
+        boxrule=\DefaultBoxRule,
+        arc=\DefaultArc,
+        left=#5,
+        right=#6,
+        top=#7,
+        bottom=#8,
+        valign=top,
+        halign=flush left,
+        sharp corners,
+        enhanced
+      ]
+      \markdownInput{\ContentDir#9}
+      \end{tcolorbox}
+    }
+  \end{textblock*}
+}
+
+\begin{document}
+
+% =========================================================
+% BOX DEFINITIONS
+% x, y, width, height, left, right, top, bottom, file
+% =========================================================
+
+\ContentBox{0.25}{0.25}{8}{3.50}{4pt}{4pt}{4pt}{4pt}{antennas-omnidirectional.md}
+\ContentBox{2.75}{3.75}{6}{3}{4pt}{4pt}{4pt}{4pt}{comms protocol.md}
+\ContentBox{0.25}{6}{8}{4}{4pt}{4pt}{4pt}{4pt}{checklist.md}
+%\ContentBox{2.75}{3.90}{2.40}{3.50}{4pt}{4pt}{4pt}{4pt}{box4.md}
+
+% Example overlap:
+% \ContentBoxNoBorder{1.80}{2.00}{1.50}{1.00}{2pt}{2pt}{2pt}{2pt}{overlay.md}
+
+\end{document}
