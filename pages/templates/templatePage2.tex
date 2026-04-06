@@ -1,8 +1,11 @@
-\documentclass[30pt]{article}
+\documentclass[11pt]{article}
 
 % =========================================================
-% PAGE
+% PAGE SETUP
 % =========================================================
+% This defines the physical page size.
+% Coordinates for content boxes are measured in inches
+% from the UPPER-LEFT corner of the page.
 \usepackage[
   paperwidth=8.5in,
   paperheight=11in,
@@ -11,22 +14,23 @@
 \pagestyle{empty}
 
 % =========================================================
-% POSITIONING / BOXES
+% CORE PACKAGES
 % =========================================================
+% textpos   = absolute positioning of text boxes
+% tcolorbox = visible content boxes with padding/borders
+% graphicx  = rotation support
+% xparse    = cleaner custom command definitions
+% pgfkeys   = key/value settings for content boxes
 \usepackage[absolute,overlay]{textpos}
 \usepackage[most]{tcolorbox}
 \usepackage{graphicx}
 \usepackage{xparse}
 \usepackage{pgfkeys}
 
-% Coordinates in inches from upper-left corner
-\setlength{\TPHorizModule}{1in}
-\setlength{\TPVertModule}{1in}
-
 % =========================================================
-% TYPOGRAPHY
+% TYPOGRAPHY PACKAGES
+% =========================================================
 % Requires XeLaTeX or LuaLaTeX
-% =========================================================
 \usepackage{fontspec}
 \usepackage{microtype}
 \usepackage{ragged2e}
@@ -38,38 +42,76 @@
 \usepackage{array}
 
 % =========================================================
-% FONTS
+% GLOBAL POSITIONING GRID
 % =========================================================
-\setmainfont{TeX Gyre Heros}[
-  Ligatures=TeX
-]
-\setsansfont{TeX Gyre Heros}[
-  Ligatures=TeX
-]
-\setmonofont{TeX Gyre Cursor}[
-  Scale=0.92
-]
+% Coordinates are specified in inches.
+% Example:
+% x=0.25, y=0.25
+% means 0.25 inches from left edge and 0.25 inches from top edge.
+\setlength{\TPHorizModule}{1in}
+\setlength{\TPVertModule}{1in}
 
 % =========================================================
-% BODY TEXT TUNING
+% FONT SELECTION
 % =========================================================
+% Main body font
+\setmainfont{TeX Gyre Heros}[Ligatures=TeX]
+
+% Sans font
+\setsansfont{TeX Gyre Heros}[Ligatures=TeX]
+
+% Monospace font (useful for callsigns, frequencies, code-like content)
+\setmonofont{TeX Gyre Cursor}[Scale=0.92]
+
+% =========================================================
+% GLOBAL FONT SIZE DEFINITIONS
+% =========================================================
+% Keep font sizes here so they are easy to tune later.
+%
+% BODY TEXT:
+% Main text size used inside content boxes
+\newcommand{\BodyFont}{\fontsize{16pt}{15.5pt}\selectfont}
+
+% SECTION HEADINGS:
+% Markdown "#" heading
+\newcommand{\SectionFont}{\bfseries\fontsize{28pt}{21pt}\selectfont}
+
+% Markdown "##" heading
+\newcommand{\SubsectionFont}{\bfseries\fontsize{18pt}{17pt}\selectfont}
+
+% Markdown "###" heading
+\newcommand{\SubsubsectionFont}{\bfseries\fontsize{14pt}{15pt}\selectfont}
+
+% =========================================================
+% BODY TEXT / PARAGRAPH TUNING
+% =========================================================
+% No paragraph indent
 \setlength{\parindent}{0pt}
-\setlength{\parskip}{3.5pt}
-\linespread{1.05}
+
+% Space between paragraphs
+\setlength{\parskip}{4pt}
+
+% Slightly loosen line spacing for better readability
+\linespread{1.04}
+
+% Helps reduce ugly overfull lines
 \emergencystretch=1.5em
 
-% Better behavior for narrow text measures
+% Better for narrow boxes than full justification
 \RaggedRight
 
-% Pandoc helper
+% Pandoc helper: prevents errors with compact lists
 \providecommand{\tightlist}{%
-  \setlength{\itemsep}{1pt}\setlength{\parskip}{0pt}}
+  \setlength{\itemsep}{1pt}%
+  \setlength{\parskip}{0pt}%
+}
 
 % =========================================================
-% LISTS
+% LIST STYLING
 % =========================================================
+% These settings affect Markdown bullet lists and numbered lists.
 \setlist[itemize]{
-  leftmargin=1.15em,
+  leftmargin=1.2em,
   itemsep=2pt,
   topsep=2pt,
   parsep=0pt,
@@ -82,28 +124,39 @@
   parsep=0pt,
   partopsep=0pt
 }
+
+% Bullet symbol for unordered lists
 \renewcommand{\labelitemi}{\textendash}
 
 % =========================================================
-% HEADINGS
+% HEADING STYLING
 % =========================================================
+% This controls Markdown heading appearance after Pandoc conversion.
+%
+% "#" in Markdown
 \titleformat{\section}
-  {\bfseries\fontsize{32pt}{11.8pt}\selectfont}
+  {\SectionFont}
   {}{0pt}{}
+
+% "##" in Markdown
 \titleformat{\subsection}
-  {\bfseries\fontsize{18pt}{10.6pt}\selectfont}
+  {\SubsectionFont}
   {}{0pt}{}
+
+% "###" in Markdown
 \titleformat{\subsubsection}
-  {\bfseries\fontsize{16pt}{10pt}\selectfont}
+  {\SubsubsectionFont}
   {}{0pt}{}
 
-\titlespacing*{\section}{0pt}{6pt}{2pt}
-\titlespacing*{\subsection}{0pt}{4pt}{1pt}
-\titlespacing*{\subsubsection}{0pt}{3pt}{1pt}
+% Spacing around headings
+\titlespacing*{\section}{0pt}{8pt}{3pt}
+\titlespacing*{\subsection}{0pt}{6pt}{2pt}
+\titlespacing*{\subsubsection}{0pt}{4pt}{1pt}
 
 % =========================================================
-% HYPERREF
+% HYPERLINK SETTINGS
 % =========================================================
+% Keep links invisible in print/PDF output.
 \hypersetup{
   hidelinks,
   pdfauthor={},
@@ -113,18 +166,45 @@
 % =========================================================
 % DIRECTORIES
 % =========================================================
+% This is where Pandoc-generated .tex fragments live.
+% Content boxes will pull files from this folder.
 \newcommand{\GeneratedDir}{pages/generated/}
 
 % =========================================================
-% BOX STYLE DEFAULTS
+% DEFAULT BOX STYLE
 % =========================================================
+% These are fallback settings used by content boxes.
+%
+% Default border thickness
+% Set rule=0pt in a box definition for NO border.
 \newcommand{\DefaultBoxRule}{0.5pt}
+
+% Corner rounding radius
+% Set to 0pt for perfectly square corners.
 \newcommand{\DefaultArc}{1.2pt}
+
+% Default border color
 \newcommand{\DefaultBorderColor}{black}
 
+% Default content padding
+\newcommand{\DefaultHPad}{7pt}
+\newcommand{\DefaultVPad}{6pt}
+
 % =========================================================
-% CONTENT BOX KEYS
+% CONTENT BOX USER-EDITABLE KEYS
 % =========================================================
+% This is where the available box settings are defined.
+%
+% x          = left position in inches
+% y          = top position in inches
+% width      = box width in inches
+% height     = box height in inches
+% hpad       = left/right padding inside box
+% vpad       = top/bottom padding inside box
+% angle      = rotation in degrees
+% bordercolor= border color
+% rule       = border thickness (set to 0pt for no border)
+% filename   = generated .tex file to place in the box
 \pgfkeys{
 /contentbox/.is family,
 /contentbox,
@@ -132,17 +212,20 @@ x/.initial=0,
 y/.initial=0,
 width/.initial=1,
 height/.initial=1,
-hpad/.initial=6pt,
-vpad/.initial=5pt,
+hpad/.initial=\DefaultHPad,
+vpad/.initial=\DefaultVPad,
 angle/.initial=0,
-bordercolor/.initial=black,
-rule/.initial=0.5pt,
+bordercolor/.initial=\DefaultBorderColor,
+rule/.initial=\DefaultBoxRule,
 filename/.initial=
 }
 
 % =========================================================
-% CONTENT BOX FUNCTION
+% INTERNAL CONTENT BOX FUNCTION
 % =========================================================
+% This is the messy machinery.
+% In normal use, you should NOT edit this section unless
+% you are changing how the box system fundamentally works.
 \NewDocumentCommand{\ContentBox}{m}{%
   \pgfkeys{/contentbox/.cd,#1}%
   \begin{textblock*}{\pgfkeysvalueof{/contentbox/width}in}
@@ -164,7 +247,7 @@ filename/.initial=
         sharp corners,
         enhanced
       ]
-      \fontsize{20pt}{10.7pt}\selectfont
+      \BodyFont
       \input{\GeneratedDir\pgfkeysvalueof{/contentbox/filename}}
       \end{tcolorbox}
     }%
@@ -172,31 +255,40 @@ filename/.initial=
 }
 
 % =========================================================
-% CONTENT BOX DEFINITIONS
-% This is where you specify what, where, how big, etc
+% DOCUMENT CONTENT
 % =========================================================
-
+% This is where you define textbox size, location, rotation,
+% border, and which content file gets placed in each box.
+%
+% Notes:
+% - width/height/x/y are in inches
+% - angle is in degrees
+% - rule=0pt means NO border
+% - filename should point to a generated .tex file
+%   in pages/generated/
 \begin{document}
 
 \ContentBox{
 x=0.25,
 y=0.25,
-width=8,
-height=6,
-hpad=6pt,
-vpad=5pt,
+width=7,
+height=4,
+hpad=7pt,
+vpad=6pt,
 angle=0,
+rule=0.5pt,
 filename=checklist.tex
 }
 
 \ContentBox{
 x=0.25,
-y=6.25,
-width=8,
-height=4.5,
-hpad=6pt,
-vpad=5pt,
+y=4.25,
+width=7,
+height=5,
+hpad=7pt,
+vpad=6pt,
 angle=0,
+rule=0.5pt,
 filename=frequencies.tex
 }
 
