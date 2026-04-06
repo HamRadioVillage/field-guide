@@ -1,5 +1,4 @@
 # COMMON FREQUENCIES
-
 | USE CASE             | BAND / FREQ              | NOTES                                  |
 |----------------------|--------------------------|----------------------------------------|
 | General hailing      | 146.520 MHz (VHF)        | US simplex calling freq (“.52”)        |
@@ -12,4 +11,3 @@
 | FRS (US)             | 462 / 467 MHz            | License-free US handhelds              |
 | Marine VHF           | 156.8 MHz (Ch 16)        | Distress / hailing                     |
 | Airband              | 118–137 MHz (AM)         | Aircraft comms                         |
-| HF long range        | 3–30 MHz                 | Global reach (special rules apply)     |
