@@ -52,7 +52,7 @@ jobs:
             -interaction=nonstopmode \
             -halt-on-error \
             -output-directory=pages/compiled \
-            pages/templates/templatePage2.tex
+            pages/templates/Page2.tex
 
       - name: Upload PDF
         uses: actions/upload-artifact@v4
