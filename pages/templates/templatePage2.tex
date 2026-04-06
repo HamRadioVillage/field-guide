@@ -91,10 +91,10 @@
   {\bfseries\fontsize{32pt}{11.8pt}\selectfont}
   {}{0pt}{}
 \titleformat{\subsection}
-  {\bfseries\fontsize{24pt}{10.6pt}\selectfont}
+  {\bfseries\fontsize{20pt}{10.6pt}\selectfont}
   {}{0pt}{}
 \titleformat{\subsubsection}
-  {\bfseries\fontsize{20pt}{10pt}\selectfont}
+  {\bfseries\fontsize{18pt}{10pt}\selectfont}
   {}{0pt}{}
 
 \titlespacing*{\section}{0pt}{6pt}{2pt}
@@ -141,7 +141,7 @@ filename/.initial=
 }
 
 % =========================================================
-% CONTENT BOX
+% CONTENT BOX FUNCTION
 % =========================================================
 \NewDocumentCommand{\ContentBox}{m}{%
   \pgfkeys{/contentbox/.cd,#1}%
@@ -170,6 +170,11 @@ filename/.initial=
     }%
   \end{textblock*}
 }
+
+% =========================================================
+% CONTENT BOX DEFINITIONS
+% This is where you specify what, where, how big, etc
+% =========================================================
 
 \begin{document}
 
