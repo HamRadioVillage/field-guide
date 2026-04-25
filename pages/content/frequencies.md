@@ -1,13 +1,13 @@
 # COMMON FREQUENCIES
-| USE CASE             | BAND / FREQ              | NOTES                                  |
-|----------------------|--------------------------|----------------------------------------|
-| General hailing      | 146.520 MHz (VHF)        | US simplex calling freq (“.52”)        |
-| EU hailing           | 145.500 MHz (VHF)        | Common EU simplex calling freq         |
-| Local repeaters      | 144–146 MHz (VHF)        | Offset + tone required                 |
-| UHF repeaters        | 430–440 MHz (UHF)        | Urban / shorter range                  |
-| Casual chatting      | VHF/UHF simplex          | After moving off calling freq          |
-| Foxhunting           | 144–148 / 430–440 MHz    | Beacons often low power                |
-| Walkie-talkies (PMR) | 446.0–446.2 MHz          | License-free in EU                     |
-| FRS (US)             | 462 / 467 MHz            | License-free US handhelds              |
-| Marine VHF           | 156.8 MHz (Ch 16)        | Distress / hailing                     |
-| Airband              | 118–137 MHz (AM)         | Aircraft comms                         |
+| USE CASE             | BAND / FREQ            |
+|----------------------|------------------------|
+| US simplex hailing   | 146.520 MHz (VHF)
+| EU simplex hailing   | 145.500 MHz (VHF)
+| VHF repeaters        | 144–146 MHz (VHF)
+| UHF repeaters        | 430–440 MHz (UHF)
+| Foxhunting           | 144–148 / 430–440 MHz
+| US Handheld          | 462 / 467 MHz
+| EU Handheld          | 446.0–446.2 MHz
+| CB (US/EU)           | ~47 MHz (AM/FM)
+| Marine Distress VHF  | 156.8 MHz (Ch 16)
+| Aircraft             | 118–137 MHz (AM)
