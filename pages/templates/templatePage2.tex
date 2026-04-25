@@ -9,10 +9,10 @@
 % Coordinates for content boxes are measured in inches from the
 % UPPER-LEFT corner of the page.
 %
-% If your final zine page is 5.25in x 4.25in, define that HERE
-% so font sizes and layout are tuned to the real output size.
+% Define final zine size here so we don't have to mess with scaling later.
+% For 8.5 x 11 in print size with 8 zine pages, that's a 2.75in x 4.25in
 \usepackage[
-  paperwidth=5.25in,
+  paperwidth=2.75in,
   paperheight=4.25in,
   margin=0in
 ]{geometry}
@@ -89,17 +89,17 @@
 %
 % BODY TEXT:
 % Main text size used inside content boxes
-\newcommand{\BodyFont}{\fontsize{9pt}{10.8pt}\selectfont}
+\newcommand{\BodyFont}{\fontsize{8pt}{9.8pt}\selectfont}
 
 % SECTION HEADINGS:
 % Markdown "#" heading
-\newcommand{\SectionFont}{\bfseries\fontsize{14pt}{15.5pt}\selectfont}
+\newcommand{\SectionFont}{\bfseries\fontsize{12pt}{12.5pt}\selectfont}
 
 % Markdown "##" heading
-\newcommand{\SubsectionFont}{\bfseries\fontsize{11pt}{12.5pt}\selectfont}
+\newcommand{\SubsectionFont}{\bfseries\fontsize{9.5pt}{10.5pt}\selectfont}
 
 % Markdown "###" heading
-\newcommand{\SubsubsectionFont}{\bfseries\fontsize{9.8pt}{11pt}\selectfont}
+\newcommand{\SubsubsectionFont}{\bfseries\fontsize{9pt}{10pt}\selectfont}
 
 % =========================================================
 % BODY TEXT / PARAGRAPH TUNING
