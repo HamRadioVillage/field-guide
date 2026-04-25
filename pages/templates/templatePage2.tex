@@ -130,14 +130,14 @@
 % =========================================================
 % These settings affect Markdown bullet lists and numbered lists.
 \setlist[itemize]{
-  leftmargin=1.15em,
+  leftmargin=1.1em,
   itemsep=1.5pt,
   topsep=1.5pt,
   parsep=0pt,
   partopsep=0pt
 }
 \setlist[enumerate]{
-  leftmargin=1.30em,
+  leftmargin=1.1em,
   itemsep=1.5pt,
   topsep=1.5pt,
   parsep=0pt,
@@ -168,9 +168,9 @@
   {}{0pt}{}
 
 % Spacing around headings
-\titlespacing*{\section}{0pt}{5pt}{2pt}
-\titlespacing*{\subsection}{0pt}{4pt}{1pt}
-\titlespacing*{\subsubsection}{0pt}{3pt}{1pt}
+\titlespacing*{\section}{0pt}{1pt}{2pt}
+\titlespacing*{\subsection}{0pt}{1pt}{1pt}
+\titlespacing*{\subsubsection}{0pt}{1pt}{1pt}
 
 % =========================================================
 % HYPERLINK SETTINGS
@@ -206,8 +206,8 @@
 \newcommand{\DefaultBorderColor}{black}
 
 % Default content padding
-\newcommand{\DefaultHPad}{6pt}
-\newcommand{\DefaultVPad}{5pt}
+\newcommand{\DefaultHPad}{2pt}
+\newcommand{\DefaultVPad}{2pt}
 
 % =========================================================
 % CONTENT BOX USER-EDITABLE KEYS
@@ -294,19 +294,16 @@ filename/.initial=
 % - filename should point to a generated .tex file
 %   in pages/generated/
 %
-% For a full-page content box on this zine page, use something around:
-% x=0.15, y=0.15, width=4.95, height=3.95
-%
 % The examples below split the page into two stacked boxes.
 \begin{document}
 
 \ContentBox{
 x=0.1,
 y=0.1,
-width=5.05,
+width=2.55,
 height=1.85,
-hpad=6pt,
-vpad=5pt,
+hpad=1pt,
+vpad=1pt,
 angle=0,
 rule=0pt,
 filename=checklist.tex
@@ -315,10 +312,10 @@ filename=checklist.tex
 \ContentBox{
 x=0.1,
 y=2.00,
-width=5.05,
+width=2.55,
 height=2.15,
-hpad=6pt,
-vpad=5pt,
+hpad=1pt,
+vpad=1pt,
 angle=0,
 rule=0.4pt,
 filename=frequencies.tex
