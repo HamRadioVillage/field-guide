@@ -45,15 +45,20 @@ jobs:
         run: |
           find pages -maxdepth 3 -type f | sort
 
-      - name: Build PDF
+      - name: Build all page PDFs
         run: |
           mkdir -p pages/compiled
-          latexmk -xelatex \
-            -interaction=nonstopmode \
-            -halt-on-error \
-            -output-directory=pages/compiled \
-            pages/templates/templatePage2.tex
 
+          for template in pages/templates/*.tex; do
+            echo "Building $template"
+
+            latexmk -xelatex \
+              -interaction=nonstopmode \
+              -halt-on-error \
+              -output-directory=pages/compiled \
+              "$template"
+          done
+  
       - name: Upload PDF
         uses: actions/upload-artifact@v4
         with:
