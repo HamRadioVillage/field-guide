@@ -1,0 +1,313 @@
+\documentclass[10pt]{article}
+
+% =========================================================
+% PAGE SETUP
+% =========================================================
+% FINAL ZINE PAGE SIZE
+%
+% This sets the physical page dimensions for the compiled page.
+% Coordinates for content boxes are measured in inches from the
+% UPPER-LEFT corner of the page.
+%
+% For 8.5 x 11 in print size with 8 zine pages:
+% final page size = 2.75in x 4.25in
+\usepackage[
+  paperwidth=2.75in,
+  paperheight=4.25in,
+  margin=0in
+]{geometry}
+\pagestyle{empty}
+
+% =========================================================
+% CORE PACKAGES
+% =========================================================
+% textpos   = absolute positioning of text boxes
+% tcolorbox = visible content boxes with padding/borders
+% graphicx  = image inclusion + rotation support
+% xparse    = cleaner custom command definitions
+% pgfkeys   = key/value settings for content/image boxes
+\usepackage[absolute,overlay]{textpos}
+\usepackage[most]{tcolorbox}
+\usepackage{graphicx}
+\usepackage{xparse}
+\usepackage{pgfkeys}
+
+% =========================================================
+% TYPOGRAPHY / CONTENT PACKAGES
+% =========================================================
+% Requires XeLaTeX or LuaLaTeX
+\usepackage{fontspec}
+\usepackage{microtype}
+\usepackage{ragged2e}
+\usepackage{enumitem}
+\usepackage{titlesec}
+\usepackage{hyperref}
+\usepackage{longtable}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{amssymb}
+\usepackage{etoolbox}
+
+% =========================================================
+% GLOBAL POSITIONING GRID
+% =========================================================
+% Coordinates are specified in inches.
+\setlength{\TPHorizModule}{1in}
+\setlength{\TPVertModule}{1in}
+
+% =========================================================
+% FONT SELECTION
+% =========================================================
+\setmainfont{TeX Gyre Heros}[Ligatures=TeX]
+\setsansfont{TeX Gyre Heros}[Ligatures=TeX]
+\setmonofont{TeX Gyre Cursor}[Scale=0.90]
+
+% =========================================================
+% GLOBAL FONT SIZE DEFINITIONS
+% =========================================================
+\newcommand{\BodyFont}{\fontsize{8pt}{9.8pt}\selectfont}
+\newcommand{\SectionFont}{\bfseries\fontsize{12pt}{12.5pt}\selectfont}
+\newcommand{\SubsectionFont}{\bfseries\fontsize{9.5pt}{10.5pt}\selectfont}
+\newcommand{\SubsubsectionFont}{\bfseries\fontsize{9pt}{10pt}\selectfont}
+\newcommand{\TableFont}{\fontsize{7.5pt}{9pt}\selectfont}
+
+% =========================================================
+% TABLE FORMATTING
+% =========================================================
+\AtBeginEnvironment{longtable}{\TableFont}
+\AtBeginEnvironment{tabular}{\TableFont}
+
+\setlength{\tabcolsep}{4pt}
+\renewcommand{\arraystretch}{1.0}
+
+% Reduce extra vertical space around Pandoc-generated longtables
+\setlength{\LTpre}{0pt}
+\setlength{\LTpost}{0pt}
+
+% =========================================================
+% BODY TEXT / PARAGRAPH TUNING
+% =========================================================
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{3pt}
+\linespread{1.02}
+\emergencystretch=1em
+\RaggedRight
+
+% Pandoc helper: prevents errors with compact lists
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{1pt}%
+  \setlength{\parskip}{0pt}%
+}
+
+% =========================================================
+% LIST STYLING
+% =========================================================
+\setlist[itemize]{
+  leftmargin=1.1em,
+  itemsep=1.5pt,
+  topsep=1.5pt,
+  parsep=0pt,
+  partopsep=0pt
+}
+\setlist[enumerate]{
+  leftmargin=1.1em,
+  itemsep=1.5pt,
+  topsep=1.5pt,
+  parsep=0pt,
+  partopsep=0pt
+}
+
+\renewcommand{\labelitemi}{\textendash}
+
+% =========================================================
+% HEADING STYLING
+% =========================================================
+% "#" in Markdown
+\titleformat{\section}
+  {\SectionFont}
+  {}{0pt}{}
+
+% "##" in Markdown
+\titleformat{\subsection}
+  {\SubsectionFont}
+  {}{0pt}{}
+
+% "###" in Markdown
+\titleformat{\subsubsection}
+  {\SubsubsectionFont}
+  {}{0pt}{}
+
+% Spacing around headings
+\titlespacing*{\section}{0pt}{1pt}{2pt}
+\titlespacing*{\subsection}{0pt}{1pt}{1pt}
+\titlespacing*{\subsubsection}{0pt}{1pt}{1pt}
+
+% =========================================================
+% HYPERLINK SETTINGS
+% =========================================================
+\hypersetup{
+  hidelinks,
+  pdfauthor={},
+  pdftitle={}
+}
+
+% =========================================================
+% DIRECTORIES
+% =========================================================
+% Generated .tex fragments from Markdown live here.
+\newcommand{\GeneratedDir}{pages/generated/}
+
+% Images live in the same folder as your source Markdown content.
+% Example: pages/content/slimjim.png
+\newcommand{\ContentDir}{pages/content/}
+
+% =========================================================
+% DEFAULT BOX STYLE
+% =========================================================
+\newcommand{\DefaultBoxRule}{0.4pt}
+\newcommand{\DefaultArc}{1pt}
+\newcommand{\DefaultBorderColor}{black}
+\newcommand{\DefaultHPad}{2pt}
+\newcommand{\DefaultVPad}{2pt}
+
+% =========================================================
+% SHARED BOX USER-EDITABLE KEYS
+% =========================================================
+% x           = left position in inches
+% y           = top position in inches
+% width       = box width in inches
+% height      = box height in inches
+% hpad        = left/right padding inside box
+% vpad        = top/bottom padding inside box
+% angle       = rotation in degrees
+% bordercolor = border color
+% rule        = border thickness; set rule=0pt for no border
+% filename    = file to place in the box
+\pgfkeys{
+/contentbox/.is family,
+/contentbox,
+x/.initial=0,
+y/.initial=0,
+width/.initial=1,
+height/.initial=1,
+hpad/.initial=\DefaultHPad,
+vpad/.initial=\DefaultVPad,
+angle/.initial=0,
+bordercolor/.initial=\DefaultBorderColor,
+rule/.initial=\DefaultBoxRule,
+filename/.initial=
+}
+
+% =========================================================
+% INTERNAL TEXT CONTENT BOX FUNCTION
+% =========================================================
+% Use this for generated .tex files from Markdown.
+%
+% filename should point to a .tex file in pages/generated/
+\NewDocumentCommand{\ContentBox}{m}{%
+  \pgfkeys{/contentbox/.cd,#1}%
+  \begin{textblock*}{\pgfkeysvalueof{/contentbox/width}in}
+    (\pgfkeysvalueof{/contentbox/x}in,\pgfkeysvalueof{/contentbox/y}in)
+    \rotatebox[origin=c]{\pgfkeysvalueof{/contentbox/angle}}{%
+      \begin{tcolorbox}[
+        width=\pgfkeysvalueof{/contentbox/width}in,
+        height=\pgfkeysvalueof{/contentbox/height}in,
+        colback=white,
+        colframe=\pgfkeysvalueof{/contentbox/bordercolor},
+        boxrule=\pgfkeysvalueof{/contentbox/rule},
+        arc=\DefaultArc,
+        left=\pgfkeysvalueof{/contentbox/hpad},
+        right=\pgfkeysvalueof{/contentbox/hpad},
+        top=\pgfkeysvalueof{/contentbox/vpad},
+        bottom=\pgfkeysvalueof{/contentbox/vpad},
+        valign=top,
+        halign=flush left,
+        sharp corners,
+        enhanced
+      ]
+      \BodyFont
+      \input{\GeneratedDir\pgfkeysvalueof{/contentbox/filename}}
+      \end{tcolorbox}
+    }%
+  \end{textblock*}
+}
+
+% =========================================================
+% INTERNAL IMAGE BOX FUNCTION
+% =========================================================
+% Use this for PNG/JPG/PDF images stored in pages/content/
+%
+% filename should point to an image file in pages/content/
+%
+% The image scales to fit inside the box while preserving aspect ratio.
+% For a tall narrow diagram, make the box narrow and tall.
+\NewDocumentCommand{\ImageBox}{m}{%
+  \pgfkeys{/contentbox/.cd,#1}%
+  \begin{textblock*}{\pgfkeysvalueof{/contentbox/width}in}
+    (\pgfkeysvalueof{/contentbox/x}in,\pgfkeysvalueof{/contentbox/y}in)
+    \rotatebox[origin=c]{\pgfkeysvalueof{/contentbox/angle}}{%
+      \begin{tcolorbox}[
+        width=\pgfkeysvalueof{/contentbox/width}in,
+        height=\pgfkeysvalueof{/contentbox/height}in,
+        colback=white,
+        colframe=\pgfkeysvalueof{/contentbox/bordercolor},
+        boxrule=\pgfkeysvalueof{/contentbox/rule},
+        arc=\DefaultArc,
+        left=\pgfkeysvalueof{/contentbox/hpad},
+        right=\pgfkeysvalueof{/contentbox/hpad},
+        top=\pgfkeysvalueof{/contentbox/vpad},
+        bottom=\pgfkeysvalueof{/contentbox/vpad},
+        valign=center,
+        halign=center,
+        sharp corners,
+        enhanced
+      ]
+      \includegraphics[
+        width=\linewidth,
+        height=\tcbtextheight,
+        keepaspectratio
+      ]{\ContentDir\pgfkeysvalueof{/contentbox/filename}}
+      \end{tcolorbox}
+    }%
+  \end{textblock*}
+}
+
+% =========================================================
+% DOCUMENT CONTENT
+% =========================================================
+% Use \ContentBox for Markdown-generated .tex files.
+% Use \ImageBox for PNG/JPG/PDF image files.
+%
+% Notes:
+% - x/y/width/height are in inches
+% - angle is in degrees
+% - rule=0pt means no border
+% - text files come from pages/generated/
+% - image files come from pages/content/
+\begin{document}
+
+\ContentBox{
+x=0.1,
+y=0.1,
+width=2.3,
+height=4.05,
+hpad=1pt,
+vpad=1pt,
+angle=0,
+rule=0pt,
+filename=foxhunting.tex
+}
+
+\ImageBox{
+x=2.43,
+y=0.1,
+width=0.85,
+height=4.05,
+hpad=0pt,
+vpad=0pt,
+angle=0,
+rule=0pt,
+filename=loop.png
+}
+
+\end{document}
