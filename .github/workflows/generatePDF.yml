@@ -1,4 +1,5 @@
-name: Build Page PDFs
+```yaml
+name: Build Field Guide PDF
 
 on:
 #  push:
@@ -24,8 +25,9 @@ jobs:
             latexmk \
             texlive-xetex \
             texlive-latex-extra \
-            texlive-fonts-recommended
-      
+            texlive-fonts-recommended \
+            poppler-utils
+
       - name: Create output directories
         run: |
           mkdir -p pages/generated
@@ -35,6 +37,9 @@ jobs:
         run: |
           for f in pages/content/*.md; do
             base=$(basename "$f" .md)
+
+            echo "Converting $f"
+
             pandoc "$f" \
               --from=gfm \
               --to=latex \
@@ -47,8 +52,6 @@ jobs:
 
       - name: Build all page PDFs
         run: |
-          mkdir -p pages/compiled
-
           for template in pages/templates/*.tex; do
             echo "Building $template"
 
@@ -58,13 +61,70 @@ jobs:
               -output-directory=pages/compiled \
               "$template"
           done
-  
-      - name: Upload PDF
+
+      - name: Show compiled page PDFs
+        run: |
+          ls -lah pages/compiled/*.pdf
+
+      - name: Verify required pages
+        run: |
+          required_files=(
+            "templatePageF.pdf"
+            "templatePage1.pdf"
+            "templatePage2.pdf"
+            "templatePage3.pdf"
+            "templatePage4.pdf"
+            "templatePage5.pdf"
+            "templatePage6.pdf"
+            "templatePageB.pdf"
+          )
+
+          for file in "${required_files[@]}"; do
+            if [ ! -f "pages/compiled/$file" ]; then
+              echo "ERROR: Missing required page: $file"
+              exit 1
+            fi
+          done
+
+          echo "All required pages found."
+
+      - name: Assemble Field Guide
+        run: |
+          pdfunite \
+            pages/compiled/templatePageF.pdf \
+            pages/compiled/templatePage1.pdf \
+            pages/compiled/templatePage2.pdf \
+            pages/compiled/templatePage3.pdf \
+            pages/compiled/templatePage4.pdf \
+            pages/compiled/templatePage5.pdf \
+            pages/compiled/templatePage6.pdf \
+            pages/compiled/templatePageB.pdf \
+            pages/compiled/FieldOperatorGuide.pdf
+
+          echo "Field guide assembled successfully."
+
+      - name: Show final PDF
+        run: |
+          ls -lh pages/compiled/FieldOperatorGuide.pdf
+          pdfinfo pages/compiled/FieldOperatorGuide.pdf
+
+      - name: Upload complete Field Guide
+        uses: actions/upload-artifact@v4
+        with:
+          name: field-operator-guide
+          path: pages/compiled/FieldOperatorGuide.pdf
+
+      - name: Upload individual page PDFs
         uses: actions/upload-artifact@v4
         with:
           name: compiled-pages
-          path: pages/compiled/*.pdf
-
-      - name: Show compiled files
-        run: |
-          ls -la pages/compiled
+          path: |
+            pages/compiled/templatePageF.pdf
+            pages/compiled/templatePage1.pdf
+            pages/compiled/templatePage2.pdf
+            pages/compiled/templatePage3.pdf
+            pages/compiled/templatePage4.pdf
+            pages/compiled/templatePage5.pdf
+            pages/compiled/templatePage6.pdf
+            pages/compiled/templatePageB.pdf
+```
