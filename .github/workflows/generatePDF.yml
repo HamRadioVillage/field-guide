@@ -1,9 +1,7 @@
-```yaml
-name: Build Field Guide PDF
+```yaml id="wmbt93"
+name: Build Field Guide Zine
 
 on:
-#  push:
-#    branches: [ main ]
   workflow_dispatch:
 
 env:
@@ -62,10 +60,6 @@ jobs:
               "$template"
           done
 
-      - name: Show compiled page PDFs
-        run: |
-          ls -lah pages/compiled/*.pdf
-
       - name: Verify required pages
         run: |
           required_files=(
@@ -88,7 +82,11 @@ jobs:
 
           echo "All required pages found."
 
-      - name: Assemble Field Guide
+      # ------------------------------------------------------------
+      # Build normal sequential PDF
+      # ------------------------------------------------------------
+
+      - name: Assemble sequential Field Guide
         run: |
           pdfunite \
             pages/compiled/templatePageF.pdf \
@@ -101,18 +99,159 @@ jobs:
             pages/compiled/templatePageB.pdf \
             pages/compiled/FieldOperatorGuide.pdf
 
-          echo "Field guide assembled successfully."
+      # ------------------------------------------------------------
+      # Build one-sheet 8-page folding zine
+      #
+      # Physical layout:
+      #
+      #        TOP ROW (rotated 180 degrees)
+      #
+      #       [ 3 ] [ 4 ] [ 5 ] [ 6 ]
+      #
+      #       -------------------------
+      #
+      #       [ 2 ] [ 1 ] [ F ] [ B ]
+      #
+      #             BOTTOM ROW
+      #
+      # This is the standard one-sheet / PocketMod-style
+      # eight-page folding arrangement.
+      # ------------------------------------------------------------
 
-      - name: Show final PDF
+      - name: Create zine imposition TeX
         run: |
-          ls -lh pages/compiled/FieldOperatorGuide.pdf
-          pdfinfo pages/compiled/FieldOperatorGuide.pdf
+          cat > pages/compiled/zine.tex <<'EOF'
+          \documentclass{article}
+
+          \usepackage[
+            landscape,
+            margin=0mm
+          ]{geometry}
+
+          \usepackage{graphicx}
+
+          \pagestyle{empty}
+          \setlength{\parindent}{0pt}
+
+          \begin{document}
+
+          \noindent
+          \begin{minipage}[t][0.5\paperheight][c]{0.25\paperwidth}
+            \centering
+            \rotatebox{180}{%
+              \includegraphics[
+                width=0.25\paperwidth,
+                height=0.5\paperheight,
+                keepaspectratio
+              ]{templatePage3.pdf}%
+            }
+          \end{minipage}%
+          \begin{minipage}[t][0.5\paperheight][c]{0.25\paperwidth}
+            \centering
+            \rotatebox{180}{%
+              \includegraphics[
+                width=0.25\paperwidth,
+                height=0.5\paperheight,
+                keepaspectratio
+              ]{templatePage4.pdf}%
+            }
+          \end{minipage}%
+          \begin{minipage}[t][0.5\paperheight][c]{0.25\paperwidth}
+            \centering
+            \rotatebox{180}{%
+              \includegraphics[
+                width=0.25\paperwidth,
+                height=0.5\paperheight,
+                keepaspectratio
+              ]{templatePage5.pdf}%
+            }
+          \end{minipage}%
+          \begin{minipage}[t][0.5\paperheight][c]{0.25\paperwidth}
+            \centering
+            \rotatebox{180}{%
+              \includegraphics[
+                width=0.25\paperwidth,
+                height=0.5\paperheight,
+                keepaspectratio
+              ]{templatePage6.pdf}%
+            }
+          \end{minipage}
+
+          \noindent
+          \begin{minipage}[t][0.5\paperheight][c]{0.25\paperwidth}
+            \centering
+            \includegraphics[
+              width=0.25\paperwidth,
+              height=0.5\paperheight,
+              keepaspectratio
+            ]{templatePage2.pdf}
+          \end{minipage}%
+          \begin{minipage}[t][0.5\paperheight][c]{0.25\paperwidth}
+            \centering
+            \includegraphics[
+              width=0.25\paperwidth,
+              height=0.5\paperheight,
+              keepaspectratio
+            ]{templatePage1.pdf}
+          \end{minipage}%
+          \begin{minipage}[t][0.5\paperheight][c]{0.25\paperwidth}
+            \centering
+            \includegraphics[
+              width=0.25\paperwidth,
+              height=0.5\paperheight,
+              keepaspectratio
+            ]{templatePageF.pdf}
+          \end{minipage}%
+          \begin{minipage}[t][0.5\paperheight][c]{0.25\paperwidth}
+            \centering
+            \includegraphics[
+              width=0.25\paperwidth,
+              height=0.5\paperheight,
+              keepaspectratio
+            ]{templatePageB.pdf}
+          \end{minipage}
+
+          \end{document}
+          EOF
+
+      - name: Build folding zine
+        working-directory: pages/compiled
+        run: |
+          xelatex \
+            -interaction=nonstopmode \
+            -halt-on-error \
+            -jobname=FieldOperatorGuide_Zine \
+            zine.tex
+
+      - name: Verify final PDFs
+        run: |
+          echo "Sequential PDF:"
+          pdfinfo pages/compiled/FieldOperatorGuide.pdf | grep Pages
+
+          echo "Zine PDF:"
+          pdfinfo pages/compiled/FieldOperatorGuide_Zine.pdf | grep Pages
+
+          ZINE_PAGES=$(pdfinfo pages/compiled/FieldOperatorGuide_Zine.pdf \
+            | awk '/Pages:/ {print $2}')
+
+          if [ "$ZINE_PAGES" != "1" ]; then
+            echo "ERROR: Zine should contain exactly one physical page."
+            exit 1
+          fi
+
+          echo "Zine successfully generated as one physical sheet."
 
       - name: Upload complete Field Guide
         uses: actions/upload-artifact@v4
         with:
           name: field-operator-guide
           path: pages/compiled/FieldOperatorGuide.pdf
+
+      - name: Upload printable folding zine
+        uses: actions/upload-artifact@v4
+        with:
+          name: field-operator-guide-zine
+          path: pages/compiled/FieldOperatorGuide_Zine.pdf
 
       - name: Upload individual page PDFs
         uses: actions/upload-artifact@v4
