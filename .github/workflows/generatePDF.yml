@@ -1,4 +1,3 @@
-```yaml id="wmbt93"
 name: Build Field Guide Zine
 
 on:
@@ -269,4 +268,3 @@ jobs:
             pages/compiled/templatePage5.pdf
             pages/compiled/templatePage6.pdf
             pages/compiled/templatePageB.pdf
-```
