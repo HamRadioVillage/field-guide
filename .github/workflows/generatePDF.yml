@@ -2,6 +2,9 @@
 name: Build Field Guide Zine
 
 on:
+  push:
+    branches:
+      - main
   workflow_dispatch:
 
 env:
