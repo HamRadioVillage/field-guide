@@ -123,11 +123,11 @@ jobs:
       - name: Create zine imposition TeX
         run: |
           cat > pages/compiled/zine.tex <<'EOF'
-          \documentclass[letterpaper]{article}
+          \documentclass{article}
 
           \usepackage[
-            letterpaper,
-            landscape,
+            paperwidth=11in,
+            paperheight=8.5in,
             margin=0in
           ]{geometry}
 
@@ -144,127 +144,154 @@ jobs:
             overlay
           ]
 
+          % ==================================================
+          % Each panel is:
+          %
+          %   1/4 sheet width  = 2.75 in
+          %   1/2 sheet height = 4.25 in
+          %
+          % Nodes are positioned by CENTER.
+          % ==================================================
+
           % --------------------------------------------------
-          % TOP ROW — rotated 180 degrees
+          % TOP ROW
+          % All pages rotated 180 degrees
           % --------------------------------------------------
 
           % Page 3
           \node[
-            anchor=north west,
+            anchor=center,
             inner sep=0pt,
             rotate=180
           ] at
-            ([xshift=0.25\paperwidth,yshift=0pt]
+            ([xshift=0.125\paperwidth,
+              yshift=-0.25\paperheight]
              current page.north west)
           {
             \includegraphics[
               width=0.25\paperwidth,
-              height=0.5\paperheight
+              height=0.5\paperheight,
+              keepaspectratio
             ]{templatePage3.pdf}
           };
 
           % Page 4
           \node[
-            anchor=north west,
+            anchor=center,
             inner sep=0pt,
             rotate=180
           ] at
-            ([xshift=0.50\paperwidth,yshift=0pt]
+            ([xshift=0.375\paperwidth,
+              yshift=-0.25\paperheight]
              current page.north west)
           {
             \includegraphics[
               width=0.25\paperwidth,
-              height=0.5\paperheight
+              height=0.5\paperheight,
+              keepaspectratio
             ]{templatePage4.pdf}
           };
 
           % Page 5
           \node[
-            anchor=north west,
+            anchor=center,
             inner sep=0pt,
             rotate=180
           ] at
-            ([xshift=0.75\paperwidth,yshift=0pt]
+            ([xshift=0.625\paperwidth,
+              yshift=-0.25\paperheight]
              current page.north west)
           {
             \includegraphics[
               width=0.25\paperwidth,
-              height=0.5\paperheight
+              height=0.5\paperheight,
+              keepaspectratio
             ]{templatePage5.pdf}
           };
 
           % Page 6
           \node[
-            anchor=north west,
+            anchor=center,
             inner sep=0pt,
             rotate=180
           ] at
-            ([xshift=1.00\paperwidth,yshift=0pt]
+            ([xshift=0.875\paperwidth,
+              yshift=-0.25\paperheight]
              current page.north west)
           {
             \includegraphics[
               width=0.25\paperwidth,
-              height=0.5\paperheight
+              height=0.5\paperheight,
+              keepaspectratio
             ]{templatePage6.pdf}
           };
 
           % --------------------------------------------------
           % BOTTOM ROW
+          % Normal orientation
           % --------------------------------------------------
 
           % Page 2
           \node[
-            anchor=north west,
+            anchor=center,
             inner sep=0pt
           ] at
-            ([xshift=0pt,yshift=-0.5\paperheight]
+            ([xshift=0.125\paperwidth,
+              yshift=-0.75\paperheight]
              current page.north west)
           {
             \includegraphics[
               width=0.25\paperwidth,
-              height=0.5\paperheight
+              height=0.5\paperheight,
+              keepaspectratio
             ]{templatePage2.pdf}
           };
 
           % Page 1
           \node[
-            anchor=north west,
+            anchor=center,
             inner sep=0pt
           ] at
-            ([xshift=0.25\paperwidth,yshift=-0.5\paperheight]
+            ([xshift=0.375\paperwidth,
+              yshift=-0.75\paperheight]
              current page.north west)
           {
             \includegraphics[
               width=0.25\paperwidth,
-              height=0.5\paperheight
+              height=0.5\paperheight,
+              keepaspectratio
             ]{templatePage1.pdf}
           };
 
           % Front cover
           \node[
-            anchor=north west,
+            anchor=center,
             inner sep=0pt
           ] at
-            ([xshift=0.50\paperwidth,yshift=-0.5\paperheight]
+            ([xshift=0.625\paperwidth,
+              yshift=-0.75\paperheight]
              current page.north west)
           {
             \includegraphics[
               width=0.25\paperwidth,
-              height=0.5\paperheight
+              height=0.5\paperheight,
+              keepaspectratio
             ]{templatePageF.pdf}
           };
 
           % Back cover
           \node[
-            anchor=north west,
+            anchor=center,
             inner sep=0pt
           ] at
-            ([xshift=0.75\paperwidth,yshift=-0.5\paperheight]
+            ([xshift=0.875\paperwidth,
+              yshift=-0.75\paperheight]
              current page.north west)
           {
             \includegraphics[
               width=0.25\paperwidth,
-              height=0.5\paperheight
+              height=0.5\paperheight,
+              keepaspectratio
             ]{templatePageB.pdf}
           };
 
