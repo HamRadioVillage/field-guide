@@ -123,95 +123,154 @@ jobs:
       - name: Create zine imposition TeX
         run: |
           cat > pages/compiled/zine.tex <<'EOF'
-          \documentclass{article}
+          \documentclass[letterpaper]{article}
 
           \usepackage[
+            letterpaper,
             landscape,
-            margin=0mm
+            margin=0in
           ]{geometry}
 
           \usepackage{graphicx}
+          \usepackage{tikz}
 
           \pagestyle{empty}
           \setlength{\parindent}{0pt}
 
           \begin{document}
 
-          \noindent
-          \begin{minipage}[t][0.5\paperheight][c]{0.25\paperwidth}
-            \centering
-            \rotatebox{180}{%
-              \includegraphics[
-                width=0.25\paperwidth,
-                height=0.5\paperheight,
-                keepaspectratio
-              ]{templatePage3.pdf}%
-            }
-          \end{minipage}%
-          \begin{minipage}[t][0.5\paperheight][c]{0.25\paperwidth}
-            \centering
-            \rotatebox{180}{%
-              \includegraphics[
-                width=0.25\paperwidth,
-                height=0.5\paperheight,
-                keepaspectratio
-              ]{templatePage4.pdf}%
-            }
-          \end{minipage}%
-          \begin{minipage}[t][0.5\paperheight][c]{0.25\paperwidth}
-            \centering
-            \rotatebox{180}{%
-              \includegraphics[
-                width=0.25\paperwidth,
-                height=0.5\paperheight,
-                keepaspectratio
-              ]{templatePage5.pdf}%
-            }
-          \end{minipage}%
-          \begin{minipage}[t][0.5\paperheight][c]{0.25\paperwidth}
-            \centering
-            \rotatebox{180}{%
-              \includegraphics[
-                width=0.25\paperwidth,
-                height=0.5\paperheight,
-                keepaspectratio
-              ]{templatePage6.pdf}%
-            }
-          \end{minipage}
+          \begin{tikzpicture}[
+            remember picture,
+            overlay
+          ]
 
-          \noindent
-          \begin{minipage}[t][0.5\paperheight][c]{0.25\paperwidth}
-            \centering
+          % --------------------------------------------------
+          % TOP ROW — rotated 180 degrees
+          % --------------------------------------------------
+
+          % Page 3
+          \node[
+            anchor=north west,
+            inner sep=0pt,
+            rotate=180
+          ] at
+            ([xshift=0.25\paperwidth,yshift=0pt]
+             current page.north west)
+          {
             \includegraphics[
               width=0.25\paperwidth,
-              height=0.5\paperheight,
-              keepaspectratio
+              height=0.5\paperheight
+            ]{templatePage3.pdf}
+          };
+
+          % Page 4
+          \node[
+            anchor=north west,
+            inner sep=0pt,
+            rotate=180
+          ] at
+            ([xshift=0.50\paperwidth,yshift=0pt]
+             current page.north west)
+          {
+            \includegraphics[
+              width=0.25\paperwidth,
+              height=0.5\paperheight
+            ]{templatePage4.pdf}
+          };
+
+          % Page 5
+          \node[
+            anchor=north west,
+            inner sep=0pt,
+            rotate=180
+          ] at
+            ([xshift=0.75\paperwidth,yshift=0pt]
+             current page.north west)
+          {
+            \includegraphics[
+              width=0.25\paperwidth,
+              height=0.5\paperheight
+            ]{templatePage5.pdf}
+          };
+
+          % Page 6
+          \node[
+            anchor=north west,
+            inner sep=0pt,
+            rotate=180
+          ] at
+            ([xshift=1.00\paperwidth,yshift=0pt]
+             current page.north west)
+          {
+            \includegraphics[
+              width=0.25\paperwidth,
+              height=0.5\paperheight
+            ]{templatePage6.pdf}
+          };
+
+          % --------------------------------------------------
+          % BOTTOM ROW
+          % --------------------------------------------------
+
+          % Page 2
+          \node[
+            anchor=north west,
+            inner sep=0pt
+          ] at
+            ([xshift=0pt,yshift=-0.5\paperheight]
+             current page.north west)
+          {
+            \includegraphics[
+              width=0.25\paperwidth,
+              height=0.5\paperheight
             ]{templatePage2.pdf}
-          \end{minipage}%
-          \begin{minipage}[t][0.5\paperheight][c]{0.25\paperwidth}
-            \centering
+          };
+
+          % Page 1
+          \node[
+            anchor=north west,
+            inner sep=0pt
+          ] at
+            ([xshift=0.25\paperwidth,yshift=-0.5\paperheight]
+             current page.north west)
+          {
             \includegraphics[
               width=0.25\paperwidth,
-              height=0.5\paperheight,
-              keepaspectratio
+              height=0.5\paperheight
             ]{templatePage1.pdf}
-          \end{minipage}%
-          \begin{minipage}[t][0.5\paperheight][c]{0.25\paperwidth}
-            \centering
+          };
+
+          % Front cover
+          \node[
+            anchor=north west,
+            inner sep=0pt
+          ] at
+            ([xshift=0.50\paperwidth,yshift=-0.5\paperheight]
+             current page.north west)
+          {
             \includegraphics[
               width=0.25\paperwidth,
-              height=0.5\paperheight,
-              keepaspectratio
+              height=0.5\paperheight
             ]{templatePageF.pdf}
-          \end{minipage}%
-          \begin{minipage}[t][0.5\paperheight][c]{0.25\paperwidth}
-            \centering
+          };
+
+          % Back cover
+          \node[
+            anchor=north west,
+            inner sep=0pt
+          ] at
+            ([xshift=0.75\paperwidth,yshift=-0.5\paperheight]
+             current page.north west)
+          {
             \includegraphics[
               width=0.25\paperwidth,
-              height=0.5\paperheight,
-              keepaspectratio
+              height=0.5\paperheight
             ]{templatePageB.pdf}
-          \end{minipage}
+          };
+
+          \end{tikzpicture}
+
+          \null
 
           \end{document}
           EOF
